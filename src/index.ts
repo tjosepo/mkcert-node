@@ -1,5 +1,5 @@
 import { type ChildProcess, spawn, spawnSync } from "node:child_process";
-import { MKCERT_BINARY_PATH } from "./platform";
+import { MKCERT_BINARY_PATH } from "./platform.js";
 
 function promisify(child: ChildProcess): Promise<void> {
   return new Promise<void>((resolve, reject) => {

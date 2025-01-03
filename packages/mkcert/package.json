@@ -1,9 +1,13 @@
 {
   "name": "mkcert-node",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
   },
   "bin": {
     "mkcert": "./dist/bin.js"

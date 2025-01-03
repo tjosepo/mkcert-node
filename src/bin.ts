@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { MKCERT_BINARY_PATH } from "./platform";
+import { MKCERT_BINARY_PATH } from "./platform.js";
 import { spawnSync } from "node:child_process";
 
 const args = process.argv.slice(2);
