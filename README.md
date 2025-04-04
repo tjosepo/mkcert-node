@@ -22,7 +22,7 @@ To generate a certificate, you can add a script to your `package.json` file like
 }
 ```
 
-The `mkcert` command will invoke the mkcert executable directly.
+The `mkcert` command will invoke the mkcert executable.
 
 ## JavaScript API
 
@@ -30,8 +30,10 @@ For more sophisticated uses, you will likely want to generate the certificates
 using a JavaScript API. That might look like this:
 
 ```js
+import { mkdir } from "node:fs/promises";
 import * as mkcert from "@tjosepo/mkcert";
 
+await mkdir("./certs");
 await mkcert.generate({
   hosts: ["localhost"],
   certFile: "./certs/certificate.pem",
