@@ -2,6 +2,14 @@
 
 This is a JavaScript wrapper for mkcert. See https://github.com/FiloSottile/mkcert
 
+## Install mkcert-node
+
+First, download and install the mkcert command locally.
+
+```
+npm install -D @tjosepo/mkcert
+```
+
 ## Script
 
 To generate a certificate, you can add a script to your `package.json` file like this:
@@ -22,7 +30,7 @@ For more sophisticated uses, you will likely want to generate the certificates
 using a JavaScript API. That might look like this:
 
 ```js
-import * as mkcert from "mkcert-node";
+import * as mkcert from "@tjosepo/mkcert";
 
 await mkcert.generate({
   hosts: ["localhost"],

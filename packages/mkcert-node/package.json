@@ -1,5 +1,5 @@
 {
-  "name": "mkcert-node",
+  "name": "@tjosepo/mkcert",
   "version": "0.1.0",
   "description": "A tool for making locally-trusted development certificates.",
   "repository": {
