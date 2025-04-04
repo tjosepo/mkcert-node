@@ -104,7 +104,7 @@ function toArgs(options: MkcertGenerateOptions): string[] {
   return args;
 }
 
-function toEnv(options: MkcertGenerateOptions): Record<string, string> {
+function toEnv(options: MkcertGenerateOptions) {
   const { caroot, trustStores } = options;
 
   const env: Record<string, string> = {};
@@ -117,7 +117,7 @@ function toEnv(options: MkcertGenerateOptions): Record<string, string> {
     env.TRUST_STORES = trustStores.join(",");
   }
 
-  return env;
+  return { ...process.env, ...env };
 }
 
 /** Generate a certificate. */

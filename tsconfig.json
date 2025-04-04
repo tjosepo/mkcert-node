@@ -12,7 +12,7 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "module": "CommonJS",
-    "outDir": "packages/mkcert-node/dist",
+    "outDir": "node_modules/mkcert-node/dist",
     "sourceMap": true,
     "declaration": true,
   }
