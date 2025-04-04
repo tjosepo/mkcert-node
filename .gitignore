@@ -9,6 +9,7 @@ lerna-debug.log*
 vite.config.ts.timestamp*
 
 node_modules
+bin
 dist
 dist-ssr
 *.local
