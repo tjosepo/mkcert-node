@@ -1,0 +1,26 @@
+{
+  "name": "@mkcert/node",
+  "version": "0.1.0",
+  "description": "A tool for making locally-trusted development certificates.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjosepo/mkcert-node.git"
+  },
+  "exports": {
+    ".": "./dist/node.js"
+  },
+  "bin": {
+    "mkcert": "./dist/shim.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "optionalDependencies": {
+    "@mkcert/darwin-arm64": "0.1.0",
+    "@mkcert/darwin-x64": "0.1.0",
+    "@mkcert/linux-arm64": "0.1.0",
+    "@mkcert/linux-x64": "0.1.0",
+    "@mkcert/win32-arm64": "0.1.0",
+    "@mkcert/win32-x64": "0.1.0"
+  }
+}

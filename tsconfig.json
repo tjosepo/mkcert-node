@@ -1,9 +1,9 @@
 {
-  "include": ["src/**/*"],
+  "include": ["src"],
   "compilerOptions": {
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "es2022",
+    "target": "ES2017",
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
@@ -12,8 +12,8 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "module": "CommonJS",
-    "outDir": "packages/mkcert/dist",
+    "outDir": "packages/@mkcert/node/dist",
     "sourceMap": true,
-    "declaration": true,
+    "declaration": true
   }
 }

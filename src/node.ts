@@ -1,36 +1,60 @@
-import { type ChildProcess, spawn, spawnSync } from "node:child_process";
-import { MKCERT_BINARY_PATH } from "./platform";
+import {
+  type ChildProcess,
+  spawn,
+  spawnSync,
+  SpawnSyncReturns,
+} from "node:child_process";
+import { generateBinPath } from "./platform";
+
+let binPath: string | undefined = undefined;
+function getBinaryPath() {
+  if (!binPath) {
+    binPath = generateBinPath();
+  }
+  return binPath;
+}
 
 function promisify(child: ChildProcess): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    child.on("close", code => {
+    let stderr = "";
+    child.stderr?.on("data", (data) => (stderr += data));
+    child.on("close", (code) => {
       if (code === 0) {
         resolve();
       } else {
-        reject(new Error(`Child process exited with code ${code}`));
+        reject(new Error(stderr));
       }
     });
   });
 }
 
+function throwIfError(result: SpawnSyncReturns<Buffer>) {
+  if (result.error) {
+    throw result.error;
+  }
+  if (result.status !== 0) {
+    throw new Error(result.stderr.toString());
+  }
+}
+
 /** Install the local CA in the system trust store. */
 export function install(): Promise<void> {
-  return promisify(spawn(MKCERT_BINARY_PATH, ["-install"]));
+  return promisify(spawn(getBinaryPath(), ["-install"]));
 }
 
 /** Install the local CA in the system trust store. */
 export function installSync(): void {
-  spawnSync(MKCERT_BINARY_PATH, ["-install"]);
+  throwIfError(spawnSync(getBinaryPath(), ["-install"]));
 }
 
 /** Uninstall the local CA (but do not delete it). */
 export function uninstall() {
-  return promisify(spawn(MKCERT_BINARY_PATH, ["-uninstall"]));
+  return promisify(spawn(getBinaryPath(), ["-uninstall"]));
 }
 
 /** Uninstall the local CA (but do not delete it). */
 export function uninstallSync() {
-  spawnSync(MKCERT_BINARY_PATH, ["-uninstall"]);
+  throwIfError(spawnSync(getBinaryPath(), ["-uninstall"]));
 }
 
 export type TrustStore = "system" | "nss" | "java";
@@ -53,13 +77,22 @@ export interface MkcertGenerateOptions {
   caroot?: string;
   /** A comma-separated list of trust stores to install the local root CA into. Options are: `"system"`, `"java"` and `"nss"` (includes Firefox). Autodetected by default. */
   trustStores?: TrustStore[];
-  /** Install the local CA in the system trust store. (default: `true`) */
+  /** Install the local CA in the system trust store. (default: `false`) */
   install?: boolean;
   cwd?: string;
 }
 
 function toArgs(options: MkcertGenerateOptions): string[] {
-  const { hosts, certFile, keyFile, p12File, client, ecdsa, pkcs12, install = true } = options;
+  const {
+    hosts,
+    certFile,
+    keyFile,
+    p12File,
+    client,
+    ecdsa,
+    pkcs12,
+    install = true,
+  } = options;
 
   const args: string[] = [];
 
@@ -91,12 +124,12 @@ function toArgs(options: MkcertGenerateOptions): string[] {
     args.push("-install");
   }
 
-  hosts.forEach(host => args.push(host));
+  hosts.forEach((host) => args.push(host));
 
   return args;
 }
 
-function toEnv(options: MkcertGenerateOptions): Record<string, string> {
+function toEnv(options: MkcertGenerateOptions) {
   const { caroot, trustStores } = options;
 
   const env: Record<string, string> = {};
@@ -109,7 +142,7 @@ function toEnv(options: MkcertGenerateOptions): Record<string, string> {
     env.TRUST_STORES = trustStores.join(",");
   }
 
-  return env;
+  return { ...process.env, ...env };
 }
 
 /** Generate a certificate. */
@@ -119,7 +152,7 @@ export function generate(options: MkcertGenerateOptions): Promise<void> {
   const args = toArgs(options);
   const env = toEnv(options);
 
-  return promisify(spawn(MKCERT_BINARY_PATH, args, { cwd, env }));
+  return promisify(spawn(getBinaryPath(), args, { cwd, env }));
 }
 
 /** Generate a certificate. */
@@ -129,15 +162,15 @@ export function generateSync(options: MkcertGenerateOptions): void {
   const args = toArgs(options);
   const env = toEnv(options);
 
-  spawnSync(MKCERT_BINARY_PATH, args, { cwd, env });
+  throwIfError(spawnSync(getBinaryPath(), args, { cwd, env }));
 }
 
 /** Return the CA certificate and key storage location. */
 export async function caroot(): Promise<string> {
-  const child = spawn(MKCERT_BINARY_PATH, ["-CAROOT"]);
+  const child = spawn(getBinaryPath(), ["-CAROOT"]);
 
   let output = "";
-  child.stdout.on("data", data => (output += data));
+  child.stdout.on("data", (data) => (output += data));
 
   await promisify(child);
 
@@ -146,10 +179,12 @@ export async function caroot(): Promise<string> {
 
 /** Return the CA certificate and key storage location. */
 export function carootSync(): string {
-  const result = spawnSync(MKCERT_BINARY_PATH, ["-CAROOT"]);
+  const result = spawnSync(getBinaryPath(), ["-CAROOT"]);
+
+  throwIfError(result);
 
   let output = "";
-  result.output.filter(Boolean).forEach(data => (output += data));
+  result.output.filter(Boolean).forEach((data) => (output += data));
 
   return output.trim();
 }

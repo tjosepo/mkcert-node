@@ -1,0 +1,20 @@
+{
+  "name": "@mkcert/linux-arm64",
+  "version": "0.1.0",
+  "description": "The Linux ARM 64-bit binary for mkcert, a tool for making locally-trusted development certificates.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjosepo/mkcert-node.git"
+  },
+  "license": "MIT",
+  "preferUnplugged": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm64"
+  ]
+}
