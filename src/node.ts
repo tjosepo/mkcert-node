@@ -60,6 +60,7 @@ export function uninstallSync() {
 export type TrustStore = "system" | "nss" | "java";
 
 export interface MkcertGenerateOptions {
+  /** Custom hosts to generate the certificates for (ex: `"localhost"`) */
   hosts: string[];
   /** Customize the output paths. */
   certFile?: string;
