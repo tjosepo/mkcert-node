@@ -113,10 +113,10 @@ Returns the CA certificate and key storage location.
 
 ```ts
 /** Return the CA certificate and key storage location. */
-export declare function caroot(): Promise<string>;
+function caroot(): Promise<string>;
 
 /** Return the CA certificate and key storage location. */
-export declare function carootSync(): string;
+function carootSync(): string;
 ```
 
 ## Usage with Node.js
