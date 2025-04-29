@@ -1,6 +1,6 @@
 {
   "name": "@mkcert/linux-x64",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The Linux 64-bit binary for mkcert, a tool for making locally-trusted development certificates.",
   "repository": {
     "type": "git",
@@ -8,6 +8,11 @@
   },
   "license": "MIT",
   "preferUnplugged": true,
+  "publishConfig": {
+    "executableFiles": [
+      "./bin/mkcert"
+    ]
+  },
   "engines": {
     "node": ">=18"
   },
